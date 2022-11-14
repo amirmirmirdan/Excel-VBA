@@ -15,7 +15,7 @@ Kindly find the below listed links as your guides to find the code you're intere
 - [Collection]()
 - [Dictionary]()
 - [Error Handlers]()
-- [Best Practices]()
+- [Best Practices](Best_Practices.md)
 
 ```vba
 
