@@ -1,0 +1,145 @@
+Private Sub BudgetCode_BDO6421()
+    With ActiveSheet
+       ' Start Looping from Branch Column to Description Column
+       ' TaggingBranchColumn
+        TransactionsArray
+       '   Make it a table
+        .ListObjects.Add(xlSrcRange, Range("A1").CurrentRegion, , xlYes).Name = "GPAY6421"
+        .ListObjects("GPAY6421").TableStyle = ""
+    End With
+End Sub
+Private Sub TransactionsArray()
+    Dim arrBranch() As String
+    Dim arrDesc() As String
+    Dim lr As Long, i As Long
+    Dim rg As Range
+        Set rg = ActiveSheet.Range("A1")
+        i = 1
+        lr = LastRow - 1
+    ReDim arrBranch(i To lr) As String
+    ReDim arrDesc(i To lr) As String
+            For i = 1 To lr
+                arrBranch(i) = rg.Offset(i, 1).Value
+                arrDesc(i) = rg.Offset(i, 2).Value
+            Next i
+            i = 1
+            For i = 1 To lr
+                BudgetCode i, arrBranch(i), arrDesc(i)
+                rg.Offset(i, 9).Value = i
+            Next i
+        Erase arrBranch
+        Erase arrDesc
+    Set rg = Nothing
+    i = vbNull
+    lr = vbNull
+End Sub
+Private Function LastRow() As Long
+    With ActiveSheet.Range("A1").CurrentRegion
+        LastRow = .Rows.Count
+    End With
+End Function
+Private Sub BudgetCode(r As Long, vBranch As String, vDesc As String)
+    Dim rg As Range
+        Set rg = ActiveSheet.Range("A1")
+    Select Case vBranch
+    Case "OTHER BANKS"
+        rg.Offset(r, 7).Value = "A002-PAX DEPOSIT"
+        rg.Offset(r, 8).Value = "GPYMNL"
+    Case "RETAIL INTERNET BANKING"
+        rg.Offset(r, 7).Value = "A002-PAX DEPOSIT"
+        rg.Offset(r, 8).Value = "GPYMNL"
+    Case "TPD - MANILA"
+        rg.Offset(r, 7).Value = "BillsPay Processing Fee"
+        rg.Offset(r, 8).Value = "BillsPay Processing Fee"
+    Case Else
+                Select Case SearchKey(vDesc)
+                Case 1
+                    rg.Offset(r, 7).Value = "BANKCHARGE-CASHOUT"
+                    rg.Offset(r, 8).Value = "BANKCHARGE-CASHOUT"
+                Case 2
+                    rg.Offset(r, 7).Value = "AUTOMEX"
+                    rg.Offset(r, 8).Value = "AUTOSETTLEMENT"
+                Case 3
+                    rg.Offset(r, 7).Value = "AUTOMEX"
+                    rg.Offset(r, 8).Value = "AUTOSETTLEMENT"
+                Case 4
+                    rg.Offset(r, 7).Value = "CASHOUTREJECT"
+                    rg.Offset(r, 8).Value = "CASHOUTREJECT"
+                Case 5
+                    rg.Offset(r, 7).Value = "A003-SM BUSINESS CENTER"
+                    rg.Offset(r, 8).Value = "PAXMNL"
+                Case 6
+                    rg.Offset(r, 7).Value = "A002-PAYMAYA"
+                    rg.Offset(r, 8).Value = "GPYMNL"
+                Case 7
+                    rg.Offset(r, 7).Value = "A002-7-Eleven"
+                    rg.Offset(r, 8).Value = "GPYMNL"
+                Case 8
+                    rg.Offset(r, 7).Value = "INTERCOPYMNT-PH03"
+                    rg.Offset(r, 8).Value = "INTERCOPYMNT"
+                Case 9
+                    rg.Offset(r, 7).Value = "Pesonet Adjustment"
+                    rg.Offset(r, 8).Value = "PESONET-ADJ"
+                Case 10
+                    rg.Offset(r, 7).Value = "A003-DRAGONPAY"
+                    rg.Offset(r, 8).Value = "PAXMNL"
+                Case 11
+                    rg.Offset(r, 7).Value = "BILLSPAY"
+                    rg.Offset(r, 8).Value = "BILLSPAY"
+                Case Else
+                    rg.Offset(r, 7).Value = "RECHECK"
+                    rg.Offset(r, 8).Value = "RECHECK"
+                End Select
+    End Select
+Set rg = Nothing
+End Sub
+Private Function SearchKey(vDesc As String) As Long
+    Dim coll As New Collection
+        Set coll = collKeyword
+    Dim i As Long
+    i = 1
+    For i = 1 To coll.Count
+        If InStr(vDesc, coll.Item(i)) <> 0 Then
+            SearchKey = i
+            i = coll.Count
+        Else
+            SearchKey = 12
+        End If
+    Next i
+End Function
+
+Private Function collKeyword() As Collection
+    Dim coll As Collection
+    Set coll = New Collection
+
+    ' Branch = TBG
+    coll.Add "SERVICE FEE"
+    coll.Add "CREDIT BOB TO 3000278170"
+    coll.Add "OTHER BANK BOB  Reference"
+    coll.Add "UNSUCCESSFUL TRANSACTIONS Reference"
+    coll.Add "CORPORATE ACCOUNT"
+    coll.Add "CREDIT FROM 1511485SEM"
+    coll.Add "CREDIT FROM 06250PSC"
+    coll.Add "CREDIT FROM ID18146GRA"
+
+    ' Branch = RECON
+    coll.Add "REMITTANCE-EPC"
+    coll.Add "DRAGONPAY"
+    coll.Add "BillsPay Cash recv"
+    Set collKeyword = coll
+End Function
+
+Sub FindString_BudgetCode(RngColumn As Range, strCriteria As String, strBudgetCode As String)
+    Dim rg As Range
+    Dim strFirstAddress As String
+    With RngColumn
+        Set rg = .Find(strCriteria, LookIn:=xlValues)
+        If Not rg Is Nothing Then
+            strFirstAddress = rg.Address
+            Do
+                rg.Offset(0, 5).Value = strBudgetCode
+                Set rg = .FindNext(rg)
+            Loop While Not rg Is Nothing
+        End If
+    End With
+End Sub
