@@ -1,6 +1,19 @@
 ### Class Object
 Focus on the object methods first & along the way, you'll figure out the required object properties.
 
+#### Properties
+1. f
+2. f
+3. f
+4. f
+
+#### Methods
+1. m
+2. m
+3. m
+4. m
+
+
 #### Method - Import Sheet
 ```vb
 Public Sub ImportSheet()
@@ -27,7 +40,7 @@ Public Sub ImportSheet()
 		strCaption = vbNull
 End Sub
 ```
-created on 2022-11-18 at 20:46 #VBA 
+
 
 #### Method - Import to Range
 ```vb
@@ -35,7 +48,7 @@ Public Sub ImportRange(Optional ByRef vImportToRange As Range)
 	Dim rng As Range
 	Dim TargetBook As Workbook, TargetRange As Range
 	Dim strFile As String, strFilter As String, strCaption As String
-	
+
 	If vImportToRange = Nothing Then
 		With ActiveWorkbook.Activesheet
 			Set rng = .Activecell
@@ -62,8 +75,8 @@ Public Sub ImportRange(Optional ByRef vImportToRange As Range)
 		strCaption = vbNull
 End Sub
 ```
-created on 2022-11-18 at 21:25 #VBA 
 
+[Return](https://github.com/amirmirmirdan/Excel-VBA#project-list)
 
 
 ### Basic Module
