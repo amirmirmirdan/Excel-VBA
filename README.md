@@ -5,7 +5,7 @@ Kindly find the below listed links as your guides to find the code you're intere
 
 # ⚠ WORKING IN-PROGRESS ⚠
 ## Project List
-1. Import CSV File
+1. [CSV Class Object](CSV Class Object/Excel VBA - CSV Class Object.md) - (Additional Functions to Import & Export for Range and Sheet to CSV)
 2. Refresh Pivot when Source Data Change
 3. etc
 
