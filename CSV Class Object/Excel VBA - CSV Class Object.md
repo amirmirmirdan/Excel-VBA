@@ -31,7 +31,7 @@ created on 2022-11-18 at 20:46 #VBA
 
 #### Method - Import to Range
 ```vb
-Public Sub ImportRange(Optional By Ref vImportToRange As Range)	
+Public Sub ImportRange(Optional ByRef vImportToRange As Range)	
 	Dim rng As Range
 	Dim TargetBook As Workbook, TargetRange As Range
 	Dim strFile As String, strFilter As String, strCaption As String
