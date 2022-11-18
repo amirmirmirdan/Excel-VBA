@@ -3,14 +3,19 @@ These codes are some of the codes that I frequently use personally in multiple p
 
 Kindly find the below listed links as your guides to find the code you're interested in. 
 
-## ⚠ WORKING IN-PROGRESS ⚠
+# ⚠ WORKING IN-PROGRESS ⚠
+## Project List
+1. Import CSV File
+2. Refresh Pivot when Source Data Change
+3. etc
 
-## Excel VBA Objects
+## Code Base
+### Excel VBA Objects
 - [Workbook]()
 - [Worksheet]()
 - [Range]()
 
-## UDF - User Defined Functions
+### UDF - User Defined Functions
 - LastRow = 
 - ActiveSheet Name = 
 - Workbook Name = 
@@ -20,16 +25,14 @@ Kindly find the below listed links as your guides to find the code you're intere
 - [Functions]()
 - [Class Module & Class Object]()
 
-
-## Data Structure
+### Data Structure
 - [Arrays]()
 - [Collection]()
 - [Dictionary]()
 - [Error Handlers]()
 - [Best Practices](Best_Practices.md)
 
-
-## Algorithm 
+### Algorithm 
 - Sorting
 - Searching
 
