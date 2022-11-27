@@ -23,7 +23,7 @@ Kindly find the below listed links as your guides to find the code you're intere
 - [ ] ActiveSheet Name = 
 - [ ] Workbook Name = 
 - [ ] String Manipulation FUnctions
-- [ ] [Excel Objects](https://github.com/amirmirmirdan/Excel-VBA/edit/main/README.md#excel-application)
+- [ ] [Excel Objects](https://github.com/amirmirmirdan/Excel-VBA/blob/main/README.md#excel-application)
 - [ ] File System Object
 - [ ] Functions
 - [ ] Class Module & Class Object
