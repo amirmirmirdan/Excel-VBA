@@ -1,4 +1,4 @@
-[README](https://github.com/amirmirmirdan/Excel-VBA#project-list) | [Project List](https://github.com/amirmirmirdan/Excel-VBA#project-list) 
+[README](https://github.com/amirmirmirdan/Excel-VBA#project-list) | [Project List](https://github.com/amirmirmirdan/Excel-VBA#project-list) | [FileDialog](https://github.com/amirmirmirdan/Excel-VBA/blob/main/CSV%20Class%20Object/FileDialog.md#file-dialog)
 
 ---
 
@@ -6,7 +6,7 @@
 > Focus on the object methods first & along the way, you'll figure out the required object properties.
 > The CSV Class Object documents the methods & functions used in order to assist in Importing & Exporting Data.  
 
-## Topic
+## Contents
 - [Installation](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#installation)
 - [Usage](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#Usage)
 - [Documentation](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#Documentation)
@@ -18,23 +18,42 @@
 ---
 
 ## Installation
+### Install as an Excel File Add-Ins
+
 
 ## Usage
+### Basic Module
+Bas File Link.
+
+```vb
+Option Explicit
+Sub ImportDataToWorkbook()
+    Dim CsvHelper As New CSV_class
+        CsvHelper.ImportSheet
+    Set CsvHelper = Nothing
+End Sub
+```
 
 ## Documentation
+| Legend | Remarks |
+|---|---|
+| 🟢 | Public |
+| 📵 | Private |
+
 ### Properties
-1. **MainSheet** As _WorkSheet_
-2. f
+1. 📵 **[MainSheet](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#property-mainsheet)** As _WorkSheet_
 
 ### Event
-1. **Class_Initialize**
-2. **Class_Terminate**
+1. 📵 **[Class_Initialize](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#class-initialize)**
+2. 📵 **[Class_Terminate](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#class-terminate)**
 
 ### Methods
-1. m
-2. m
-3. m
-4. m
+1. 🟢 **Sub**: [ImportSheet](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#import-sheet)
+2. 📵 **Function**: [SelectCsvFile_Path](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#selectcsvfile_path-function) () **Return** _String_
+3. 📵 **Sub**: [CopyFileSheet](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#copy-file-sheet)
+	- SourceFile:= _[SelectCsvFile_Path](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#selectcsvfile_path-function)_
+	- Destination:= _[MainSheet](https://github.com/amirmirmirdan/Excel-VBA/edit/main/CSV%20Class%20Object/Excel%20VBA%20-%20CSV%20Class%20Object.md#property-mainsheet)_
+4. 📵 **Sub**: [ExcelBusy](https://github.com/amirmirmirdan/Excel-VBA)
 
 #### Example Code
 ##### Property MainSheet 
@@ -49,58 +68,100 @@ End Property
 Private Property Set MainSheet(vSheet As Worksheet)
     Set mvSheet = vSheet
 End Property
-
 ```
 
-##### Event: Class Initialize
+##### Class Initialize
 ```vb
 Private Sub Class_Initialize()
     Set MainSheet = ActiveSheet
 End Sub
 ```
-##### Event: Class Terminate
+##### Class Terminate
 ```vb
 Private Sub Class_Terminate()
         Set MainSheet = Nothing
 End Sub
 ```
 
-#### Methods: Import Sheet
+#### Import Sheet
 ```vb
 Public Sub ImportSheet()
     ' Declaring variables
-        Dim ws As Worksheet
-        Dim TargetBook As Workbook
-        Dim StrFile As String
-    
+    Dim ws As Worksheet
+    Dim TargetBook As Workbook
+    Dim StrFile As String
+
     ' Define Variables
-            Set ws = MainSheet
-            
+    Set ws = MainSheet
+
     ' this enables user to determine which file they would like to copy to current sheet.
-            StrFile = Application.GetOpenFilename()
-            
-            ' Avoid cause error If user _
-                Close the File Picker Dialog or _
-                Click on cancel
-            If WorksheetFunction.IsText(StrFile) = True Then
-                Set TargetBook = Workbooks.Open(StrFile)
-            Else
-                Exit Sub
-            End If
-        
+    StrFile = SelectCsvFile_Path()
+
+    ' Avoid cause error If user close the File Picker Dialog _
+    or click on cancel
+    If WorksheetFunction.IsText(StrFile) <> True Then Exit Sub
+    Else: Set TargetBook = Workbooks.Open(StrFile)
+
     ' Procedure starts here
-            TargetBook.Sheets(1).Copy After:=ws
-            TargetBook.Close SaveChanges:=False
+    CopyFileSheet _
+	SourceFile:=TargetBook, _
+	DestinationSheet:=ws
+
+    ' Clearing VBA Memory
+    Set ws = Nothing
+    Set TargetBook = Nothing
+    StrFile = vbNull
+End Sub
+```
+#### SelectCsvFile_Path Function
+```vb
+Private Function SelectCsvFile_Path() As String
+    Dim Fd As FileDialog
+    Dim Filter As FileDialogFilters
+    
+    Set Fd = Application.FileDialog(3)  ' An Enum Integer representation of the FileDialog Type Object
+    With Fd
+        ' Define a Filters object
+        Set Filter = .Filters
+        
+        With Filter
+            ' Clear the default filters
+            .Clear
+            ' Add new filter
+            .Add "CSV", "*.csv"
+            .Add "All Files", "*.*"
+        End With
+        
+            ' Either to allow or disable the multiselect file.
+            .AllowMultiSelect = False
+            
+            If .Show = False Then
+                Exit Function
+            End If
+        SelectCsvFile_Path = .SelectedItems(1)
+    End With
     
     ' Clearing VBA Memory
-            Set ws = Nothing
-            Set TargetBook = Nothing
-            StrFile = vbNull
+    Set Fd = Nothing
+    Set Filter = Nothing
+End Function
+```
 
+#### Copy File Sheet
+```vb
+Private Sub CopyFileSheet(ByRef SourceFile As Workbook, ByRef DestinationSheet As Worksheet)
+    ' For reuse in another class method where
+    ' - The FileDialogFilePicker.AllowMultiSelect = True, returning an array of file path.
+    ' - The idea is to loop openning the workbook &
+    ' - call this subroutine and providing the arguements required for the loop.
+            SourceFile.Sheets(1).Copy After:=DestinationSheet
+            SourceFile.Close SaveChanges:=False
 End Sub
 ```
 
-#### Method: Import to Range
+#### Import to Range
+> Note: This has not been tested yet.
+
 ```vb
 Public Sub ImportRange(Optional ByRef vImportToRange As Range)	
 	Dim rng As Range
